@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f6f8fc;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 12% -10%, #e8efff 0%, rgba(232, 239, 255, 0) 55%),
+    radial-gradient(1000px 520px at 100% 0%, #e6f7f6 0%, rgba(230, 247, 246, 0) 50%),
+    var(--bg);
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Refined scrollbars */
+.scrollbar-slim::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.scrollbar-slim::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+.scrollbar-slim::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  background-clip: content-box;
+}
+.scrollbar-slim::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Chat markdown styling */
+.prose-chat {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #1e293b;
+}
+.prose-chat > :first-child {
+  margin-top: 0;
+}
+.prose-chat > :last-child {
+  margin-bottom: 0;
+}
+.prose-chat p {
+  margin: 0.6em 0;
+}
+.prose-chat h1,
+.prose-chat h2,
+.prose-chat h3 {
+  font-weight: 650;
+  line-height: 1.3;
+  margin: 1.1em 0 0.5em;
+  color: #0f172a;
+}
+.prose-chat h1 {
+  font-size: 1.15rem;
+}
+.prose-chat h2 {
+  font-size: 1.05rem;
+}
+.prose-chat h3 {
+  font-size: 1rem;
+}
+.prose-chat ul,
+.prose-chat ol {
+  margin: 0.5em 0;
+  padding-left: 1.3em;
+}
+.prose-chat ul {
+  list-style: disc;
+}
+.prose-chat ol {
+  list-style: decimal;
+}
+.prose-chat li {
+  margin: 0.3em 0;
+}
+.prose-chat li::marker {
+  color: #94a3b8;
+}
+.prose-chat a {
+  color: #1a48e0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose-chat strong {
+  font-weight: 650;
+  color: #0f172a;
+}
+.prose-chat code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  background: #eef2f7;
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  padding: 0.1em 0.35em;
+}
+.prose-chat pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 12px;
+  padding: 0.9em 1em;
+  overflow-x: auto;
+  margin: 0.8em 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+.prose-chat pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+.prose-chat blockquote {
+  border-left: 3px solid #c7d2fe;
+  padding-left: 0.9em;
+  color: #475569;
+  margin: 0.7em 0;
+}
+.prose-chat table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.7em 0;
+  font-size: 0.88rem;
+}
+.prose-chat th,
+.prose-chat td {
+  border: 1px solid #e2e8f0;
+  padding: 0.45em 0.6em;
+  text-align: left;
+}
+.prose-chat th {
+  background: #f1f5f9;
+  font-weight: 600;
+}
+
+/* Subtle grid texture for hero areas */
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(148, 163, 184, 0.25) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
