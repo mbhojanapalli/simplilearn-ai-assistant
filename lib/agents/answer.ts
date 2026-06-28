@@ -1,23 +1,34 @@
-import { getAnthropic } from "@/lib/anthropic";
+import { getLLM } from "@/lib/anthropic";
 import { ANSWER_MODEL } from "@/lib/config";
 import type { ChatMessage } from "@/lib/types";
 
 /**
- * Create a streaming completion for the answering agent.
- * Returns the Anthropic MessageStream; the caller iterates text deltas.
+ * Stream a grounded answer from the answering agent.
+ *
+ * Yields Anthropic-shaped `content_block_delta` events so the chat route's
+ * streaming loop stays provider-agnostic.
  */
-export function createAnswerStream(system: string, history: ChatMessage[]) {
-  const client = getAnthropic();
+export async function* createAnswerStream(system: string, history: ChatMessage[]) {
+  const client = getLLM();
 
-  // Keep the last few turns to bound token usage; the API tolerates the shape.
-  const messages = history
-    .slice(-10)
-    .map((m) => ({ role: m.role, content: m.content }));
+  // Keep the last few turns to bound token usage.
+  const messages = [
+    { role: "system" as const, content: system },
+    ...history.slice(-10).map((m) => ({ role: m.role, content: m.content })),
+  ];
 
-  return client.messages.stream({
+  const stream = await client.chat.completions.create({
     model: ANSWER_MODEL,
     max_tokens: 1024,
-    system,
+    temperature: 0.3,
+    stream: true,
     messages,
   });
+
+  for await (const chunk of stream) {
+    const text = chunk.choices?.[0]?.delta?.content;
+    if (text) {
+      yield { type: "content_block_delta", delta: { type: "text_delta", text } } as const;
+    }
+  }
 }

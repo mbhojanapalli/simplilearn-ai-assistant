@@ -7,7 +7,7 @@ export async function GET() {
   return NextResponse.json({
     status: "ok",
     services: {
-      anthropic: Boolean(process.env.ANTHROPIC_API_KEY),
+      llm: Boolean(process.env.GROQ_API_KEY),
       vector:
         Boolean(process.env.UPSTASH_VECTOR_REST_URL) &&
         Boolean(process.env.UPSTASH_VECTOR_REST_TOKEN),

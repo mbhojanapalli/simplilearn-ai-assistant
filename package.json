@@ -11,8 +11,8 @@
     "seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.106.0",
     "@upstash/vector": "^1.2.3",
+    "openai": "^6.45.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.460.0",
     "mammoth": "^1.8.0",

@@ -3,11 +3,11 @@
  * Model IDs are overridable via env so the deployment can be tuned without code changes.
  */
 
-// Fast, low-cost model for query classification / routing.
-export const ROUTER_MODEL = process.env.ROUTER_MODEL ?? "claude-haiku-4-5";
+// Fast, low-cost model for query classification / routing (Groq, free tier).
+export const ROUTER_MODEL = process.env.ROUTER_MODEL ?? "llama-3.1-8b-instant";
 
-// Higher-quality model for generating grounded, learner-facing answers.
-export const ANSWER_MODEL = process.env.ANSWER_MODEL ?? "claude-sonnet-4-6";
+// Higher-quality model for generating grounded, learner-facing answers (Groq, free tier).
+export const ANSWER_MODEL = process.env.ANSWER_MODEL ?? "llama-3.3-70b-versatile";
 
 export const BRAND = {
   name: "Simplilearn",
@@ -80,7 +80,11 @@ export type DocCategory = (typeof DOC_CATEGORIES)[number]["value"];
 // Retrieval tuning.
 export const RETRIEVAL = {
   topK: 5,
-  // Upstash cosine similarity score (0..1). Chunks below this are treated as weak context.
+  // Minimum similarity score to keep a retrieved chunk.
+  // NOTE: 0 works for BOTH index types. For a Sparse (BM25) index, scores are
+  // not on a 0..1 scale, and BM25 only returns term-matching chunks anyway, so
+  // we keep everything it returns. (For a Dense/cosine index you could raise
+  // this to ~0.7 to drop weak matches.)
   minScore: 0,
   // Chunking
   chunkSize: 1100, // characters

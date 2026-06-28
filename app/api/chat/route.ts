@@ -3,7 +3,7 @@ import { routeQuery } from "@/lib/agents/router";
 import { retrieveChunks, buildContextBlock, type RetrievedChunk } from "@/lib/agents/retrieve";
 import { createAnswerStream } from "@/lib/agents/answer";
 import { buildAnswerSystem } from "@/lib/prompts";
-import type { ChatMessage, ChatStreamEvent } from "@/lib/types";
+import type { ChatMessage, ChatStreamEvent, RouteDecision } from "@/lib/types";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -31,6 +31,11 @@ export async function POST(req: NextRequest) {
   }
   const query = lastUser.content.trim();
 
+  // Optional manual agent override from the UI selector ("academic" | "support").
+  const agentField = (body as { agent?: unknown })?.agent;
+  const forcedAgent =
+    agentField === "academic" || agentField === "support" ? agentField : null;
+
   const encoder = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
@@ -39,8 +44,18 @@ export async function POST(req: NextRequest) {
 
       try {
         // 1) Route → which specialist agent should handle this?
-        send({ type: "status", value: "Understanding your question…" });
-        const route = await routeQuery(query);
+        //    If the learner picked an agent in the UI, honor it and skip routing.
+        let route: RouteDecision;
+        if (forcedAgent) {
+          route = {
+            category: forcedAgent,
+            confidence: 1,
+            reasoning: "Agent selected by the learner.",
+          };
+        } else {
+          send({ type: "status", value: "Understanding your question…" });
+          route = await routeQuery(query);
+        }
 
         // 2) Retrieve grounding context from that agent's namespace.
         let chunks: RetrievedChunk[] = [];
@@ -98,14 +113,14 @@ export async function POST(req: NextRequest) {
 
 function friendlyError(err: unknown): string {
   const msg = err instanceof Error ? err.message : String(err);
-  if (msg.includes("ANTHROPIC_API_KEY")) {
-    return "The assistant isn't configured yet — the Anthropic API key is missing. (Admin: set ANTHROPIC_API_KEY.)";
+  if (msg.includes("GROQ_API_KEY")) {
+    return "The assistant isn't configured yet — the LLM API key is missing. (Admin: set GROQ_API_KEY.)";
   }
   if (msg.toLowerCase().includes("vector store")) {
     return "The knowledge base isn't configured yet — the vector database connection is missing.";
   }
   if (msg.includes("401") || msg.toLowerCase().includes("authentication")) {
-    return "The Anthropic API key was rejected. Please check it's valid.";
+    return "The LLM API key was rejected. Please check it's valid.";
   }
   return "Something went wrong while generating a response. Please try again.";
 }
