@@ -81,7 +81,7 @@ export type DocCategory = (typeof DOC_CATEGORIES)[number]["value"];
 export const RETRIEVAL = {
   topK: 5,
   // Upstash cosine similarity score (0..1). Chunks below this are treated as weak context.
-  minScore: 0.7,
+  minScore: 0,
   // Chunking
   chunkSize: 1100, // characters
   chunkOverlap: 150,
