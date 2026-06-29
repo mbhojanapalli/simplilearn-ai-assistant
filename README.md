@@ -154,6 +154,34 @@ per-category chunk counts and lets you delete documents.
 
 ---
 
+## Sample documents (for testing)
+
+The repo ships **six** example documents in [`sample-documents/`](./sample-documents) that
+populate the knowledge base. Each is written to answer a specific test query, so you can
+verify routing, retrieval, and citations end-to-end. They're already indexed in the live
+demo, so the queries below work immediately.
+
+**Academic** — retrieved by the Academic agent:
+
+| File | Contents | Example query it answers |
+| --- | --- | --- |
+| `overfitting-explained.md` | What overfitting is, how to spot and reduce it | *"Explain overfitting in simple terms."* |
+| `machine-learning-course-notes.md` | ML foundations — learning types, the model workflow, evaluation metrics, generalization | General concept / study questions |
+| `capstone-project-guidelines.md` | Project deliverables, milestones, grading rubric, and an "if you get stuck" guide | *"I'm stuck on my assignment. Can you guide me?"* |
+
+**Help & Support** — retrieved by the Help & Support agent:
+
+| File | Contents | Example query it answers |
+| --- | --- | --- |
+| `certificates-faq.md` | Certificate issuance timing, download/share, name corrections | *"When will I receive my certificate?"* |
+| `refund-policy.md` | Refund eligibility windows, non-refundable items, how to request | *"What is the refund policy?"* |
+| `platform-access-and-live-classes.md` | Live-class access, recordings, login/password, missing courses | *"I can't access my live class."* |
+
+Each document is chunked and indexed into its agent's namespace, so a query only ever
+retrieves from the relevant corpus — and the answer cites the specific source it used.
+
+---
+
 ## Project structure
 
 ```
